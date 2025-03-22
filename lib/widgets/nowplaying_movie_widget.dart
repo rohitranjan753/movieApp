@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/provider/movie_provider.dart';
 import 'package:movieapp/screens/details_screen.dart';
+import 'package:movieapp/widgets/movie_card_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -18,7 +19,9 @@ class NowPlayingMovieWidget extends StatelessWidget {
       ).fetchMovies('now_playing'),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return SizedBox(
+            height: 200,
+            child: MovieCardShimmer());
         }
         return Consumer<MovieProvider>(
           builder: (context, movieProvider, child) {
@@ -26,9 +29,12 @@ class NowPlayingMovieWidget extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Now Playing",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10,left: 10,right: 10),
+                  child: Text(
+                    TextConstants.nowPlayingMovies,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 CarouselSlider.builder(
                   options: CarouselOptions(

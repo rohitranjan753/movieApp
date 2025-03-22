@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/screens/search_screen.dart';
 import 'package:movieapp/widgets/nowplaying_movie_widget.dart';
 import 'package:movieapp/widgets/popular_movie_widget.dart';
@@ -11,7 +12,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Movies'),
+      
+      appBar: AppBar(title: Text(TextConstants.appTitle),centerTitle: true,
       actions: [
         IconButton(
           icon: Icon(Icons.search),
@@ -25,6 +27,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 20,
           children: [
               NowPlayingMovieWidget(), // Carousel for Now Playing movies
               PopularMovieWidget(),

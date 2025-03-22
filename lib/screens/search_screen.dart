@@ -20,9 +20,10 @@ class SearchScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text('Search')),
+        appBar: AppBar(title: Text(TextConstants.searchTitle),centerTitle: true,),
         body: Center(
           child: Column(
+            spacing: 20,
             children: [
               TextField(
                 onChanged: (value) {
@@ -32,7 +33,7 @@ class SearchScreen extends StatelessWidget {
                   ).searchMovies(value);
                 },
                 decoration: InputDecoration(
-                  hintText: 'Search movies',
+                  hintText: TextConstants.searchHintText,
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -56,15 +57,21 @@ class SearchScreen extends StatelessWidget {
                                 // Add navigation to movie details screen here
                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(movie: movies[index])));
                               },
-                              child: Image.network(
-                                '${TextConstants.imageUrl}${movies[index].posterPath}',
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  '${TextConstants.imageUrl}${movies[index].posterPath}',
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset('assets/movie_placeholder.jpg',fit: BoxFit.cover,);
+                                  },
+                                ),
                               ),
                             );
                           },
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: 0.7,
                             crossAxisCount: 3,
-                            crossAxisSpacing: 15,
+                            crossAxisSpacing: 10,
                             mainAxisSpacing: 15,
                           ),
                         ),

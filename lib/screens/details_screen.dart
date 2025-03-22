@@ -14,7 +14,6 @@ class DetailsScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            // leading: const Icon(Icon.arrow_back),
             expandedHeight: 500,
             pinned: true,
             floating: true,
@@ -26,6 +25,9 @@ class DetailsScreen extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl: '${TextConstants.imageUrl}${movie.posterPath}',
+                  errorWidget: (context, url, error) {
+                    return const Icon(Icons.error);
+                  },
                   fit: BoxFit.cover,
                 ),
               ),
@@ -37,14 +39,7 @@ class DetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    movie.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text('Overview'),
+                  Text(TextConstants.overViewText,style: TextStyle(fontSize: 20),),
                   const SizedBox(height: 16),
                   Text(movie.overview),
                   const SizedBox(height: 16),
@@ -60,7 +55,7 @@ class DetailsScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Text('Release: '),
+                              Text(TextConstants.releaseDateText),
                               Text(movie.releaseDate),
                             ],
                           ),
@@ -73,7 +68,7 @@ class DetailsScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Text('Rating:  '),
+                              Text(TextConstants.ratingText),
                               Icon(Icons.star, color: Colors.amber),
                               Text(
                                 '${movie.voteAverage.toStringAsFixed(1)}/10',

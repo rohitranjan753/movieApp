@@ -14,23 +14,24 @@ class MovieProvider extends ChangeNotifier {
   // Fetch Movies with Offline Support
   Future<void> fetchMovies(String category) async {
     var connectivityResult = await Connectivity().checkConnectivity();
-    print(connectivityResult);
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      print("No Internet! Fetching from cache...");
       await _loadCachedMovies(category);
       return;
     }
 
-    print("Internet Available! Fetching from API...");
     try {
       final response = await http.get(
-        Uri.parse('${TextConstants.baseApiUrl}/movie/$category?api_key=${TextConstants.apiKey}'),
+        Uri.parse(
+          '${TextConstants.baseApiUrl}/movie/$category?api_key=${TextConstants.apiKey}',
+        ),
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final List<MovieModel> movies =
-            (data['results'] as List).map((movie) => MovieModel.fromJson(movie)).toList();
+            (data['results'] as List)
+                .map((movie) => MovieModel.fromJson(movie))
+                .toList();
 
         _movies[category] = movies;
         notifyListeners();
@@ -47,19 +48,22 @@ class MovieProvider extends ChangeNotifier {
   Future<void> searchMovies(String query) async {
     final connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      print("No Internet! Cannot search.");
       return;
     }
 
     try {
       final response = await http.get(
-        Uri.parse('${TextConstants.baseApiUrl}/search/movie?api_key=${TextConstants.apiKey}&query=$query'),
+        Uri.parse(
+          '${TextConstants.baseApiUrl}/search/movie?api_key=${TextConstants.apiKey}&query=$query',
+        ),
       );
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final List<MovieModel> movies =
-            (data['results'] as List).map((movie) => MovieModel.fromJson(movie)).toList();
+            (data['results'] as List)
+                .map((movie) => MovieModel.fromJson(movie))
+                .toList();
 
         _movies['search'] = movies;
         notifyListeners();
@@ -73,27 +77,25 @@ class MovieProvider extends ChangeNotifier {
   Future<void> _cacheMovies(String category, String jsonMovies) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('movies_$category', jsonMovies);
-    print("Done cache");
   }
 
   // Load movies from SharedPreferences
   Future<void> _loadCachedMovies(String category) async {
     try {
-    final prefs = await SharedPreferences.getInstance();
-    final cachedData = prefs.getString('movies_$category');
+      final prefs = await SharedPreferences.getInstance();
+      final cachedData = prefs.getString('movies_$category');
 
-    if (cachedData != null) {
-      final List<MovieModel> movies = (json.decode(cachedData) as List)
-          .map((movie) => MovieModel.fromJson(movie))
-          .toList();
+      if (cachedData != null) {
+        final List<MovieModel> movies =
+            (json.decode(cachedData) as List)
+                .map((movie) => MovieModel.fromJson(movie))
+                .toList();
 
-      _movies[category] = movies;
-      print("Loaded cached movies");
-      notifyListeners();
-    } 
+        _movies[category] = movies;
+        notifyListeners();
+      }
     } catch (e) {
       print("Error loading cached movies: $e");
-      
     }
   }
 }
