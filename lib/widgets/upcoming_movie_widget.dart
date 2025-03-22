@@ -3,8 +3,8 @@ import 'package:movieapp/main.dart';
 import 'package:movieapp/provider/movie_provider.dart';
 import 'package:provider/provider.dart';
 
-class UpcomingMoviesList extends StatelessWidget {
-  const UpcomingMoviesList({super.key});
+class UpcomingMovieWidget extends StatelessWidget {
+  const UpcomingMovieWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

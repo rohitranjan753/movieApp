@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:movieapp/constant/text_constant.dart';
+import 'package:movieapp/models/movie_model.dart';
 import 'package:movieapp/provider/auth_provider.dart';
 import 'package:movieapp/provider/movie_provider.dart';
+import 'package:movieapp/screens/details_screen.dart';
 import 'package:movieapp/widgets/nowplaying_movie_widget.dart';
 import 'package:movieapp/widgets/popular_movie_widget.dart';
 import 'package:movieapp/widgets/toprated_movie_widget.dart';
@@ -30,10 +32,6 @@ class MyApp extends StatelessWidget {
             return authProvider.isAuthenticated ? HomeScreen() : LoginScreen();
           },
         ),
-        routes: {
-          '/search': (context) => SearchScreen(),
-          '/details': (context) => DetailsScreen(),
-        },
       ),
     );
   }
@@ -85,9 +83,9 @@ class HomeScreen extends StatelessWidget {
           children: [
              NowPlayingMovieWidget(), // Carousel for Now Playing movies
               // SizedBox(height: 20),
-              PopularMoviesList(),
-              TopRatedMoviesList(),
-              UpcomingMoviesList(),
+              PopularMovieWidget(),
+              TopRatedMovieWidget(),
+              UpcomingMovieWidget(),
           ],
         ),
       ),
@@ -109,15 +107,7 @@ class SearchScreen extends StatelessWidget {
 
 // details_screen.dart
 
-class DetailsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Movie Details')),
-      body: Center(child: Text('Movie details here')), // Placeholder
-    );
-  }
-}
+
 
 // movie_list.dart
 
@@ -152,26 +142,31 @@ class MovieList extends StatelessWidget {
 // movie_card.dart
 
 class MovieCard extends StatelessWidget {
-  final dynamic movie;
+  final MovieModel movie;
   const MovieCard({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      width: 120,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network('${TextConstants.imageUrl}${movie['poster_path']}'),
-          ),
-          SizedBox(height: 4),
-          // Text(movie['title'] ?? 'No Title', style: TextStyle(fontSize: 12)),
-          // Text(movie['release_date'] ?? 'Unknown Date', style: TextStyle(fontSize: 10)),
-        ],
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(movie: movie)));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 5),
+        width: 120,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network('${TextConstants.imageUrl}${movie.posterPath}'),
+            ),
+            SizedBox(height: 4),
+            // Text(movie['title'] ?? 'No Title', style: TextStyle(fontSize: 12)),
+            // Text(movie['release_date'] ?? 'Unknown Date', style: TextStyle(fontSize: 10)),
+          ],
+        ),
       ),
     );
   }

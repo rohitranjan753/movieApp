@@ -3,7 +3,7 @@ import 'package:movieapp/main.dart';
 import 'package:movieapp/provider/movie_provider.dart';
 import 'package:provider/provider.dart';
 
-class PopularMoviesList extends StatelessWidget {
+class PopularMovieWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return 
