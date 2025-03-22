@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movieapp/main.dart';
 import 'package:movieapp/provider/movie_provider.dart';
+import 'package:movieapp/widgets/movie_card.dart';
 import 'package:provider/provider.dart';
 
 class TopRatedMovieWidget extends StatelessWidget {

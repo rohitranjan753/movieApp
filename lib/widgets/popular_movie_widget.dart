@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movieapp/main.dart';
 import 'package:movieapp/provider/movie_provider.dart';
+import 'package:movieapp/widgets/movie_card.dart';
 import 'package:provider/provider.dart';
 
 class PopularMovieWidget extends StatelessWidget {
+  const PopularMovieWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return 
@@ -14,7 +16,7 @@ class PopularMovieWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text('Popular Movies', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ),
-        Container(
+        SizedBox(
           height: 200,
           child: FutureBuilder(
             future: Provider.of<MovieProvider>(context, listen: false).fetchMovies('popular'),

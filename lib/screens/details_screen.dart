@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/models/movie_model.dart';
@@ -9,7 +10,6 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(movie.title);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -19,14 +19,13 @@ class DetailsScreen extends StatelessWidget {
             pinned: true,
             floating: true,
             flexibleSpace: FlexibleSpaceBar(
-             
               background: ClipRRect(
                 borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(24),
-                    bottomRight: Radius.circular(24)),
-                child: Image.network(
-                  '${TextConstants.imageUrl}${movie.posterPath}',
-                  filterQuality: FilterQuality.high,
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: '${TextConstants.imageUrl}${movie.posterPath}',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -45,20 +44,10 @@ class DetailsScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    'Overview',
-                   
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    movie.overview,
-                    
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  Text('Overview'),
+                  const SizedBox(height: 16),
+                  Text(movie.overview),
+                  const SizedBox(height: 16),
                   SizedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,11 +60,8 @@ class DetailsScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Text(
-                                'Release: ',
-                                
-                              ),
-                              Text(movie.releaseDate,),
+                              Text('Release: '),
+                              Text(movie.releaseDate),
                             ],
                           ),
                         ),
@@ -87,27 +73,23 @@ class DetailsScreen extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
+                              Text('Rating:  '),
+                              Icon(Icons.star, color: Colors.amber),
                               Text(
-                                'Rating:  ',
-                               
+                                '${movie.voteAverage.toStringAsFixed(1)}/10',
                               ),
-                              Icon(Icons.star,color: Colors.amber,),
-                              Text('${movie.voteAverage.toStringAsFixed(1)}/10',),
-
                             ],
                           ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-
-

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/provider/movie_provider.dart';
@@ -25,7 +26,10 @@ class NowPlayingMovieWidget extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Now Playing", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(
+                  "Now Playing",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 CarouselSlider.builder(
                   options: CarouselOptions(
                     height: 280,
@@ -41,12 +45,18 @@ class NowPlayingMovieWidget extends StatelessWidget {
                     final movie = movies[index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(movie: movie)));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailsScreen(movie: movie),
+                          ),
+                        );
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          '${TextConstants.imageUrl}${movie.posterPath}',
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              '${TextConstants.imageUrl}${movie.posterPath}',
                           fit: BoxFit.cover,
                         ),
                       ),

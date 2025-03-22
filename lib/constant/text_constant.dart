@@ -1,4 +1,5 @@
 class TextConstants{
    static const apiKey = 'cbe11002c4e69e9b82516d3980c0835e';
     static const imageUrl = 'https://image.tmdb.org/t/p/w500';
+    static const baseApiUrl = 'https://api.themoviedb.org/3';
 }

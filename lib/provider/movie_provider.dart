@@ -1,31 +1,99 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/models/movie_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class MovieProvider extends ChangeNotifier {
-  String baseUrl = 'https://api.themoviedb.org/3';
   final Map<String, List<MovieModel>> _movies = {};
 
   List<MovieModel> getMovies(String category) => _movies[category] ?? [];
 
+  // Fetch Movies with Offline Support
   Future<void> fetchMovies(String category) async {
-    if (_movies.containsKey(category)) return; // Prevent redundant API calls
+    var connectivityResult = await Connectivity().checkConnectivity();
+    print(connectivityResult);
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      print("No Internet! Fetching from cache...");
+      await _loadCachedMovies(category);
+      return;
+    }
 
-    final response = await http.get(
-      Uri.parse('$baseUrl/movie/$category?api_key=${TextConstants.apiKey}'),
-    );
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final List<MovieModel> movies =
-          (data['results'] as List)
-              .map((movie) => MovieModel.fromJson(movie))
-              .toList();
+    print("Internet Available! Fetching from API...");
+    try {
+      final response = await http.get(
+        Uri.parse('${TextConstants.baseApiUrl}/movie/$category?api_key=${TextConstants.apiKey}'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<MovieModel> movies =
+            (data['results'] as List).map((movie) => MovieModel.fromJson(movie)).toList();
+
+        _movies[category] = movies;
+        notifyListeners();
+
+        // Cache the data locally
+        await _cacheMovies(category, json.encode(data['results']));
+      }
+    } catch (e) {
+      print("Error fetching movies: $e");
+    }
+  }
+
+  // Search Movies with Offline Support
+  Future<void> searchMovies(String query) async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      print("No Internet! Cannot search.");
+      return;
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse('${TextConstants.baseApiUrl}/search/movie?api_key=${TextConstants.apiKey}&query=$query'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<MovieModel> movies =
+            (data['results'] as List).map((movie) => MovieModel.fromJson(movie)).toList();
+
+        _movies['search'] = movies;
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error searching movies: $e");
+    }
+  }
+
+  // Save movies to SharedPreferences
+  Future<void> _cacheMovies(String category, String jsonMovies) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('movies_$category', jsonMovies);
+    print("Done cache");
+  }
+
+  // Load movies from SharedPreferences
+  Future<void> _loadCachedMovies(String category) async {
+    try {
+    final prefs = await SharedPreferences.getInstance();
+    final cachedData = prefs.getString('movies_$category');
+
+    if (cachedData != null) {
+      final List<MovieModel> movies = (json.decode(cachedData) as List)
+          .map((movie) => MovieModel.fromJson(movie))
+          .toList();
 
       _movies[category] = movies;
+      print("Loaded cached movies");
       notifyListeners();
+    } 
+    } catch (e) {
+      print("Error loading cached movies: $e");
+      
     }
   }
 }
