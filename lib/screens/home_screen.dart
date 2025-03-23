@@ -29,7 +29,25 @@ class HomeScreen extends StatelessWidget {
               // We will navigate to the search screen when the search icon is clicked
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
+                PageRouteBuilder(
+                  transitionsBuilder: (
+                    context,
+                    animation,
+                    secondaryAnimation,
+                    child,
+                  ) {
+                    return ScaleTransition(
+                      scale: Tween<double>(
+                        begin: 0.0,
+                        end: 1.0,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return SearchScreen();
+                  },
+                ),
               );
             },
           ),

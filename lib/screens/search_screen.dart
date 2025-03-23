@@ -109,10 +109,28 @@ class SearchScreen extends StatelessWidget {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        DetailsScreen(movie: movies[index]),
+                              PageRouteBuilder(
+                                transitionsBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
+                                  return ScaleTransition(
+                                    scale: Tween<double>(
+                                      begin: 0.0,
+                                      end: 1.0,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                                pageBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                ) {
+                                  return DetailsScreen(movie: movies[index]);
+                                },
                               ),
                             );
                           },

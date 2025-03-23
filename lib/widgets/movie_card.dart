@@ -17,7 +17,18 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(movie: movie)));
+        Navigator.push(context, 
+        PageRouteBuilder(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(animation),
+              child: child,
+            );
+          },
+          pageBuilder: (context, animation, secondaryAnimation) {
+          return DetailsScreen(movie: movie);
+        })
+        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
