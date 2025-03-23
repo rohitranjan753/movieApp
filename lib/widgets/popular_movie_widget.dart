@@ -5,6 +5,11 @@ import 'package:movieapp/widgets/movie_card.dart';
 import 'package:movieapp/widgets/movie_card_shimmer.dart';
 import 'package:provider/provider.dart';
 
+/*
+  This is a PopularMovieWidget Widget.
+  This widget is used to show popular movies in home screen.
+  We will use this widget in home screen to show popular movies.
+*/
 class PopularMovieWidget extends StatelessWidget {
   const PopularMovieWidget({super.key});
 
@@ -23,7 +28,7 @@ class PopularMovieWidget extends StatelessWidget {
           child: FutureBuilder(
             future: Provider.of<MovieProvider>(context, listen: false).fetchMovies('popular'),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.waiting) {                                // Show the shimmer if the data is loading
                 return MovieCardShimmer();
               }
               return Consumer<MovieProvider>(

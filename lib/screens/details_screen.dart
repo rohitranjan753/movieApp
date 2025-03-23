@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/models/movie_model.dart';
 
+/*This widget is used to display the details of the movie
+  It takes the movie object as a parameter and displays the details of the movie
+  The details include the movie poster, overview, release date, and rating */
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key, required this.movie});
 

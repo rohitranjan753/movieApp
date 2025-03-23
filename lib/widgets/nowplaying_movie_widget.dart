@@ -7,6 +7,13 @@ import 'package:movieapp/widgets/movie_card_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+/*
+  This is a NowPlayingMovieWidget Widget.
+  This widget is used to show now playing movies in home screen.
+  We will use this widget in home screen to show now playing movies.
+
+  Here I have used carousel_slider package to show now playing movies in carousel.
+*/
 class NowPlayingMovieWidget extends StatelessWidget {
   const NowPlayingMovieWidget({super.key});
 
@@ -18,7 +25,7 @@ class NowPlayingMovieWidget extends StatelessWidget {
         listen: false,
       ).fetchMovies('now_playing'),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {                        // Show the shimmer if the data is loading
           return SizedBox(
             height: 200,
             child: MovieCardShimmer());

@@ -29,4 +29,7 @@ class TextConstants{
     static const overViewText = 'Overview';
     static const releaseDateText = 'Release: ';
     static const ratingText = 'Rating: ';
+    static const noMovieFoundText = 'No movie found';
+
+    static const errorFetchingMovies = 'Something went wrong!, please try again later';
 }

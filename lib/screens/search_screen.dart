@@ -1,9 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movieapp/constant/image_constant.dart';
 import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/provider/movie_provider.dart';
 import 'package:movieapp/screens/details_screen.dart';
+import 'package:movieapp/widgets/grid_view_shimmer.dart';
 import 'package:provider/provider.dart';
 
+/*
+  This widget is used to display the search screen
+  It takes the search query as input and displays the search results
+*/
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
@@ -13,14 +20,14 @@ class SearchScreen extends StatelessWidget {
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
-          Provider.of<MovieProvider>(
-            context,
-            listen: false,
-          ).searchMovies('');
+          Provider.of<MovieProvider>(context, listen: false).searchMovies('');
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(TextConstants.searchTitle),centerTitle: true,),
+        appBar: AppBar(
+          title: Text(TextConstants.searchTitle),
+          centerTitle: true,
+        ),
         body: Center(
           child: Column(
             spacing: 20,
@@ -47,35 +54,91 @@ class SearchScreen extends StatelessWidget {
                   Widget? child,
                 ) {
                   final movies = movieProvider.getMovies('search');
-                  return 
-                      Expanded(
-                        child: GridView.builder(
-                          itemCount: movies.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                // Add navigation to movie details screen here
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(movie: movies[index])));
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                  '${TextConstants.imageUrl}${movies[index].posterPath}',
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset('assets/movie_placeholder.jpg',fit: BoxFit.cover,);
-                                  },
-                                ),
+                  // First check if the movies list is empty and the search query is not empty
+                  // If the movies list is empty and the search query is not empty, then display the loading shimmer
+                  if (movies.isEmpty &&
+                      movieProvider.searchStringQuery.isNotEmpty) {
+                    if (movieProvider.isLoading) {                                       // If the api is in loading state, display the shimmer
+                      return GridViewShimmer();
+                    }else if(movieProvider.errorString.isNotEmpty){                     // If there is an error, display the error message
+                      return Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error,
+                              size: 50,
+                            ),
+                            Text(
+                              movieProvider.errorString,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                      );
+
+                    }
+                    // If there are no movies found, display the no movie found image
+                    return Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            ImageConstant.noMovie,
+                            height: 250,
+                            width: 250,
+                          ),
+                          Text(
+                            TextConstants.noMovieFoundText,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // If the movies list is not empty, display the movies
+                  // Movies list will be displayed in a grid view
+                  return Expanded(
+                    child: GridView.builder(
+                      itemCount: movies.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        DetailsScreen(movie: movies[index]),
                               ),
                             );
                           },
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.7,
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 15,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              errorWidget: (context, url, error) {
+                                return Image.asset(
+                                  ImageConstant.moviePlaceholder,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                              imageUrl:
+                                  '${TextConstants.imageUrl}${movies[index].posterPath}',
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      },
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 0.7,
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 15,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],

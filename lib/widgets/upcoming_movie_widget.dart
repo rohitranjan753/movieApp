@@ -5,6 +5,11 @@ import 'package:movieapp/widgets/movie_card.dart';
 import 'package:movieapp/widgets/movie_card_shimmer.dart';
 import 'package:provider/provider.dart';
 
+/*
+  This is a UpcomingMovieWidget Widget.
+  This widget is used to show upcoming movies in home screen.
+  We will use this widget in home screen to show upcoming movies.
+*/
 class UpcomingMovieWidget extends StatelessWidget {
   const UpcomingMovieWidget({super.key});
 
@@ -22,8 +27,8 @@ class UpcomingMovieWidget extends StatelessWidget {
           child: FutureBuilder(
             future: Provider.of<MovieProvider>(context, listen: false).fetchMovies('upcoming'),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return MovieCardShimmer();
+              if (snapshot.connectionState == ConnectionState.waiting) {                      // Show the shimmer if the data is loading
+                return MovieCardShimmer();  
               }
               return Consumer<MovieProvider>(
                 builder: (context, movieProvider, child) {

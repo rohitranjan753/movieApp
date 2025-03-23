@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'TMDB Movies',
+        title: 'Movie App',
         theme: ThemeData.dark(),
         home: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
-            return authProvider.isAuthenticated ? HomeScreen() : LoginScreen();
+            return authProvider.isAuthenticated ? HomeScreen() : LoginScreen();                       // If the user is authenticated, show the HomeScreen, otherwise show the LoginScreen
           },
         ),
       ),

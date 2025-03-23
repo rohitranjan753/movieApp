@@ -4,6 +4,11 @@ import 'package:movieapp/constant/text_constant.dart';
 import 'package:movieapp/models/movie_model.dart';
 import 'package:movieapp/screens/details_screen.dart';
 
+/*
+  This is a MovieCard Widget.
+  This widget is used to show movie card in home screen.
+  We will use this widget in home screen to show movie card.
+*/
 class MovieCard extends StatelessWidget {
   final MovieModel movie;
   const MovieCard({super.key, required this.movie});

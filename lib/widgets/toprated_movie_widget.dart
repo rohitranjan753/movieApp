@@ -4,8 +4,12 @@ import 'package:movieapp/provider/movie_provider.dart';
 import 'package:movieapp/widgets/movie_card.dart';
 import 'package:movieapp/widgets/movie_card_shimmer.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
+/*
+  This is a TopRatedMovieWidget Widget.
+  This widget is used to show top rated movies in home screen.
+  We will use this widget in home screen to show top rated movies.
+*/
 class TopRatedMovieWidget extends StatelessWidget {
   const TopRatedMovieWidget({super.key});
 
@@ -29,7 +33,7 @@ class TopRatedMovieWidget extends StatelessWidget {
               listen: false,
             ).fetchMovies('top_rated'),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.waiting) {                        // Show the shimmer if the data is loading
                 return MovieCardShimmer();
               }
               return Consumer<MovieProvider>(

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+/*
+  This is a MovieCard Shimmer Widget.
+  This widget is used to show shimmer effect in MovieCard.
+  We will use this widget in home screen to show shimmer effect while loading data.
+*/
 class MovieCardShimmer extends StatelessWidget {
   const MovieCardShimmer({
     super.key,
