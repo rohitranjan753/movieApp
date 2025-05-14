@@ -28,16 +28,19 @@ jobs:
       - name: Restore packages
         run: flutter pub get
 
-      - name: Build Android App Bundle
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: flutter build appbundle --build-number ${{ steps.buildnumber.outputs.build_number }} --build-name ${{ steps.tag.outputs.new_version }}
+      # - name: Build Android App Bundle
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: flutter build appbundle --build-number ${{ steps.buildnumber.outputs.build_number }} --build-name ${{ steps.tag.outputs.new_version }}
 
-      - name: Publish Android Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-aab
-          path: build/app/outputs/bundle/release/release.aab
+      # - name: Publish Android Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: release-aab
+      #     path: build/app/outputs/bundle/release/release.aab
+
+      - name: Build Apk
+        run: flutter build apk
 
       #This is based on the API Service once configured in the Google Play Console
       # - name: Deploy to Alpha
