@@ -2,7 +2,7 @@ name: Flutter_Test_Build
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build_prod:
